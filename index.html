@@ -10,15 +10,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Importando o Font Awesome para o ícone do WhatsApp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Importando o CSS personalizado a partir de um arquivo externo -->
     <link rel="stylesheet" href="immersive_url(loja-carros-webmotors-css)">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
 
     <!-- Header da página -->
     <header class="bg-white shadow-sm py-4">
         <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="index.html">
             <h1 class="text-2xl font-bold text-sky-600">MotorHub</h1>
+            </a>
             <nav class="hidden md:flex space-x-6 text-slate-600 font-medium">
                 <a href="#" class="hover:text-sky-600 transition-colors">Comprar</a>
                 <a href="#" class="hover:text-sky-600 transition-colors">Vender</a>
@@ -35,12 +44,13 @@
         <!-- Barra de busca e filtros -->
         <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
             <h2 class="text-3xl font-bold text-slate-900 mb-4 text-center md:text-left">Pesquise seu próximo carro</h2>
-            <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" placeholder="Qual carro você procura?" class="flex-grow px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                <button class="bg-sky-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-sky-700 transition-colors">
+            <!-- Formulário para a busca -->
+            <form id="search-form" class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="search-input" placeholder="Qual carro você procura?" class="flex-grow px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <button type="submit" class="bg-sky-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-sky-700 transition-colors">
                     Buscar
                 </button>
-            </div>
+            </form>
         </div>
 
         <!-- Título da seção de resultados -->
@@ -49,11 +59,30 @@
         <!-- Grid de carros -->
         <div id="car-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <!-- Os cards dos carros serão injetados aqui via JavaScript -->
-        </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Botão flutuante do WhatsApp -->
+    <!-- Ele usa 'fixed' para se manter na tela e 'bottom-6 right-6' para posicioná-lo no canto inferior direito -->
+    <!-- A classe 'bg-green-500' define a cor de fundo, 'rounded-full' o torna redondo, e a 'hover:scale-110' adiciona uma animação ao passar o mouse -->
+    <!-- A URL 'wa.me' cria o link direto para o WhatsApp, incluindo uma mensagem pré-definida ('text=...') -->
+    <a href="https://wa.me/5511999999999?text=Olá,%20tenho%20interesse%20em%20um%20veículo%20disponível%20no%20MotorHub."
+       class="fixed bottom-6 right-6 z-50 bg-green-500 text-white rounded-full p-4 shadow-lg transition-transform hover:scale-110"
+       aria-label="Fale conosco pelo WhatsApp"
+       target="_blank">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- Footer da página -->
+    <footer class="bg-slate-900 text-slate-400 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 MotorHub. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
     <script>
-        // Dados mock para os carros, com informações adicionais como quilometragem
+        // Dados mock para os carros. Os dados agora incluem URLs de imagens de placeholder.
         const cars = [
             {
                 name: "Porsche 911 Turbo S",
@@ -122,15 +151,18 @@
         ];
 
         // Elementos da DOM
-        const carListContainer = document.getElementById('car-list');
+            const carListContainer = document.getElementById('car-list');
+        const searchForm = document.getElementById('search-form');
+        const searchInput = document.getElementById('search-input');
 
-        // Função para criar e exibir os cards dos carros
-        function renderCars() {
+        // Função para criar e exibir os cards dos carros.
+        // Agora aceita um array opcional de carros para renderizar.
+        function renderCars(carsToRender = cars) {
             carListContainer.innerHTML = ''; // Limpa o container
-            cars.forEach(car => {
+            carsToRender.forEach(car => {
                 const carCard = document.createElement('div');
                 carCard.classList.add('bg-white', 'rounded-2xl', 'overflow-hidden', 'shadow-lg', 'border', 'border-slate-200', 'hover:shadow-2xl', 'transition-shadow', 'duration-300');
-                
+
                 carCard.innerHTML = `
                     <div class="relative h-48 sm:h-56 overflow-hidden">
                         <img src="${car.image}" alt="${car.name}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
@@ -140,17 +172,37 @@
                         <p class="text-sm text-slate-500 mb-4">${car.year} • ${car.mileage}</p>
                         <p class="text-2xl font-extrabold text-sky-600 mb-4">${car.price}</p>
                         <p class="text-sm text-slate-600 mb-6 line-clamp-2">${car.description}</p>
-                        <button class="w-full bg-sky-600 text-white font-semibold py-3 rounded-lg hover:bg-sky-700 transition-colors">
+                        <a href="compra.html?car=${encodeURIComponent(car.name)}" class="w-full bg-sky-600 text-white font-semibold py-3 rounded-lg hover:bg-sky-700 transition-colors text-center block">
                             Ver detalhes
-                        </button>
+                        </a>
                     </div>
                 `;
                 carListContainer.appendChild(carCard);
             });
         }
 
-        // Inicializa a página com a lista de carros
-        document.addEventListener('DOMContentLoaded', renderCars);
+        // Adiciona um listener para o envio do formulário de busca
+        searchForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            // Filtra os carros com base no termo de busca
+            const filteredCars = cars.filter(car => {
+                const carName = car.name.toLowerCase();
+                const carDescription = car.description.toLowerCase();
+                return carName.includes(searchTerm) || carDescription.includes(searchTerm);
+            });
+            
+            // Exibe os carros filtrados
+            renderCars(filteredCars);
+        });
+
+        // Inicializa a página com a lista completa de carros
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCars();
+        });
+        
     </script>
 </body>
 </html>
