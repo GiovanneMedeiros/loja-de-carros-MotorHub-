@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprar Carro - MotorHub</title>
+    <!-- Incluindo o Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Adicionando a fonte Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Header da página -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="index.html">
+            <h1 class="text-2xl font-bold text-sky-600">MotorHub</h1>
+            </a>
+            <nav class="hidden md:flex space-x-6 text-slate-600 font-medium">
+                <a href="index.html" class="hover:text-sky-600 transition-colors">Comprar</a>
+                <a href="#" class="hover:text-sky-600 transition-colors">Vender</a>
+                <a href="financiamento.html" class="hover:text-sky-600 transition-colors">Financiar</a>
+                <a href="#" class="hover:text-sky-600 transition-colors">Serviços</a>
+            </nav>
+            <button class="bg-sky-600 text-white font-semibold py-2 px-6 rounded-full hover:bg-sky-700 transition-colors">
+                Anunciar
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Caminho de navegação (Breadcrumb) -->
+        <nav class="mb-6 text-sm text-slate-500">
+            <a href="index.html" class="hover:underline">Comprar</a> &gt; <span id="car-breadcrumb"></span>
+        </nav>
+
+        <!-- Container principal do carro -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col lg:flex-row gap-8">
+            <!-- Seção de imagem -->
+            <div class="lg:w-2/3">
+                <div class="relative h-96 rounded-xl overflow-hidden shadow-md">
+                    <img id="car-image" src="" alt="Imagem do Carro" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <!-- Seção de detalhes e compra -->
+            <div class="lg:w-1/3">
+                <h2 id="car-name" class="text-4xl font-bold text-slate-900 mb-2"></h2>
+                <p id="car-details" class="text-lg text-slate-500 mb-4"></p>
+                <p id="car-price" class="text-4xl font-extrabold text-sky-600 mb-6"></p>
+
+                <div class="space-y-4">
+                    <!-- Informações do veículo -->
+                    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <h3 class="font-bold text-slate-700 mb-2">Informações do Veículo</h3>
+                        <p class="text-sm text-slate-600 mb-1">
+                            Ano:<span id="car-year"></span>
+                        </p>
+                        <p class="text-sm text-slate-600">
+                            Quilometragem: <span id="car-mileage"></span>
+                        </p>
+                    </div>
+
+                    <!-- Botões de ação -->
+                    <button class="w-full bg-sky-600 text-white font-semibold py-3 rounded-lg hover:bg-sky-700 transition-colors">
+                        Tenho interesse
+                    </button>
+                    <a href="financiamento.html">
+                    <button class="w-full bg-white text-sky-600 font-semibold py-3 rounded-lg border-2 border-sky-600 hover:bg-sky-50 transition-colors">
+                        Simular financiamento
+                    </button>
+                    </a>
+                </div>
+
+                <div class="mt-8 text-sm text-center text-slate-500">
+                    <p>Entre em contato para agendar uma visita e fazer um test-drive.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de descrição completa -->
+        <div class="bg-white p-8 rounded-2xl shadow-lg mt-8">
+            <h3 class="text-2xl font-bold text-slate-900 mb-4">Descrição Completa</h3>
+            <p id="car-description" class="text-slate-600 leading-relaxed"></p>
+        </div>
+    </main>
+
+    <script>
+        // Dados mock para os carros, com informações adicionais como quilometragem
+        const cars = [
+            {
+                name: "Porsche 911 Turbo S",
+                year: "2023",
+                price: "R$ 1.500.000",
+                mileage: "10.500 km",
+                description: "O lendário 911 Turbo S é uma obra-prima de engenharia e desempenho, combinando luxo e adrenalina.",
+                image: "Porsche 911.jpg"
+            },
+            {
+                name: "Mercedes-Benz Classe G",
+                year: "2022",
+                price: "R$ 1.800.000",
+                mileage: "15.000 km",
+                description: "Um ícone de luxo e robustez, o Mercedes-Benz Classe G é conhecido por sua capacidade off-road e interior luxuoso.",
+                image: "Mercedes Benz AMG G63.jpg"
+            },
+            {
+                name: "BMW M5 Competition",
+                year: "2024",
+                price: "R$ 1.200.000",
+                mileage: "5.200 km",
+                description: "O BMW M5 Competition oferece a combinação perfeita de desempenho de pista e usabilidade diária.",
+                image: "BMW M5 (F90) Competition.jpg"
+            },
+            {
+                name: "Audi R8 V10 Performance",
+                year: "2022",
+                price: "R$ 2.000.000",
+                mileage: "8.900 km",
+                description: "Com um motor V10 aspirado e um design agressivo, o Audi R8 é um superesportivo que oferece uma performance de tirar o fôlego.",
+                image: "white Audi R8.jpg"
+            },
+            {
+                name: "Lamborghini Huracán Evo",
+                year: "2023",
+                price: "R$ 4.000.000",
+                mileage: "3.100 km",
+                description: "O Lamborghini Huracán Evo é a representação máxima do desempenho de ponta, com aerodinâmica avançada e um design futurista.",
+                image: "Lamborghini Huracan.jpg"
+            },
+            {
+                name: "Ferrari F8 Tributo",
+                year: "2021",
+                price: "R$ 3.500.000",
+                mileage: "12.000 km",
+                description: "A Ferrari F8 Tributo combina a excelência da engenharia italiana com um design elegante e uma performance impressionante.",
+                image: "Ferrari F8 Tributo.jpg"
+            },
+            {
+                name: "McLaren 720S",
+                year: "2020",
+                price: "R$ 3.200.000",
+                mileage: "18.000 km",
+                description: "O McLaren 720S é um superesportivo com design aerodinâmico e motor V8 biturbo, garantindo aceleração e velocidade de tirar o fôlego.",
+                image: "McLaren.jpg"
+            },
+            {
+                name: "Aston Martin Vantage",
+                year: "2023",
+                price: "R$ 1.900.000",
+                mileage: "7.800 km",
+                description: "O Aston Martin Vantage é a combinação perfeita de estilo britânico e potência, com design agressivo e interior luxuoso.",
+                image: "download.jpg"
+            }
+        ];
+
+        // Função para preencher os dados do carro na página
+        function renderCarDetails() {
+            // Obter o nome do carro da URL (simulando um parâmetro de busca)
+            const urlParams = new URLSearchParams(window.location.search);
+            const carName = urlParams.get('car');
+            const car = cars.find(c => c.name === carName);
+
+            // Se o carro não for encontrado, exibe uma mensagem de erro
+            if (!car) {
+                document.querySelector('main').innerHTML = '<div class="text-center text-xl text-slate-500 py-20">Carro não encontrado.</div>';
+                return;
+            }
+
+            // Preencher os elementos da página com os dados do carro
+            document.getElementById('car-breadcrumb').textContent = car.name;
+            document.getElementById('car-image').src = car.image;
+            document.getElementById('car-image').alt = car.name;
+            document.getElementById('car-name').textContent = car.name;
+            document.getElementById('car-details').textContent = `${car.year} • ${car.mileage}`;
+            document.getElementById('car-price').textContent = car.price;
+            document.getElementById('car-year').textContent = car.year;
+            document.getElementById('car-mileage').textContent = car.mileage;
+            document.getElementById('car-description').textContent = car.description;
+        }
+
+        // Inicializa a página com os dados do carro
+        document.addEventListener('DOMContentLoaded', renderCarDetails);
+    </script>
+</body>
+</html>
